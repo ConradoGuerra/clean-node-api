@@ -1,10 +1,8 @@
 const httpResponse = require("../helpers/http-response");
 
 module.exports = class userRouter {
-    route(httpRequest) {
-      if (!httpRequest || !httpRequest.body) {
-        return httpResponse.serverError();
-      }
+  route(httpRequest) {
+    try {
       const { name, gender, city, birthday, age } = httpRequest.body;
       if (!name) {
         return httpResponse.badRequest("name");
@@ -17,6 +15,9 @@ module.exports = class userRouter {
       } else if (!age) {
         return httpResponse.badRequest("age");
       }
+      return httpResponse.unauthorized();
+    } catch (error) {
+      return httpResponse.serverError();
     }
   }
-  
+};

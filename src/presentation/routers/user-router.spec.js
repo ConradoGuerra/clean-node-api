@@ -1,4 +1,5 @@
 const MissingParamError = require("../helpers/missing-param-error");
+const ServerError = require("../helpers/server.error");
 const userRouter = require("./user-router");
 
 describe("User Router", () => {
@@ -81,11 +82,29 @@ describe("User Router", () => {
     const sut = new userRouter();
     const httpResponse = sut.route();
     expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError(""));
   });
 
   it("Should return statusCode 500 if httpRequest has no body", () => {
     const sut = new userRouter();
     const httpResponse = sut.route({});
     expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError(""));
+  });
+
+  it("Should return statusCode 401 when invalid credential are sent", () => {
+    const sut = new userRouter();
+    const httpRequest = {
+      body: {
+        name: "invalid_name",
+        gender: "invalid_gender",
+        city: "invalid_city",
+        birthday: "invalid_birthday",
+        age: "invalid_age",
+      },
+    };
+    
+    const httpResponse = sut.route(httpRequest);
+    expect(httpResponse.statusCode).toBe(401);
   });
 });
