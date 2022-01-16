@@ -1,38 +1,5 @@
-class userRouter {
-  route(httpRequest) {
-    if (!httpRequest || !httpRequest.body) {
-      return httpResponse.serverError();
-    }
-    const { name, gender, city, birthday, age } = httpRequest.body;
-    if (!name) {
-      return httpResponse.badRequest("name");
-    } else if (!gender) {
-      return httpResponse.badRequest("gender");
-    } else if (!city) {
-      return httpResponse.badRequest("city");
-    } else if (!birthday) {
-      return httpResponse.badRequest("birthday");
-    } else if (!age) {
-      return httpResponse.badRequest("age");
-    }
-  }
-}
-
-class httpResponse {
-  static badRequest(paramName) {
-    return { statusCode: 400, body: new MissingParamError(paramName) };
-  }
-  static serverError() {
-    return { statusCode: 500 };
-  }
-}
-
-class MissingParamError extends Error {
-  constructor(paramName) {
-    super(`Missing param: ${paramName}`);
-    this.name = "MissingParamError";
-  }
-}
+const MissingParamError = require("../helpers/missing-param-error");
+const userRouter = require("./user-router");
 
 describe("User Router", () => {
   it("Should return statusCode 400 and message if no name is provided", () => {
