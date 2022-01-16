@@ -1,13 +1,12 @@
 class userRouter {
   route(httpRequest) {
-      const {name, gender, city, birthday, age} = httpRequest.body
-    if (
-      !name ||
-      !gender ||
-      !city ||
-      !birthday||
-      !age
-    ) {
+    if (!httpRequest || !httpRequest.body) {
+      return {
+        statusCode: 500,
+      };
+    }
+    const { name, gender, city, birthday, age } = httpRequest.body;
+    if (!name || !gender || !city || !birthday || !age) {
       return { statusCode: 400 };
     }
   }
@@ -25,7 +24,6 @@ describe("User Router", () => {
       },
     };
     const httpResponse = sut.route(httpRequest);
-
     expect(httpResponse.statusCode).toBe(400);
   });
 
@@ -40,7 +38,6 @@ describe("User Router", () => {
       },
     };
     const httpResponse = sut.route(httpRequest);
-
     expect(httpResponse.statusCode).toBe(400);
   });
 
@@ -55,7 +52,6 @@ describe("User Router", () => {
       },
     };
     const httpResponse = sut.route(httpRequest);
-
     expect(httpResponse.statusCode).toBe(400);
   });
 
@@ -70,7 +66,6 @@ describe("User Router", () => {
       },
     };
     const httpResponse = sut.route(httpRequest);
-
     expect(httpResponse.statusCode).toBe(400);
   });
 
@@ -85,7 +80,18 @@ describe("User Router", () => {
       },
     };
     const httpResponse = sut.route(httpRequest);
-
     expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it("Should return statusCode 500 if no httpRequest is provided", () => {
+    const sut = new userRouter();
+    const httpResponse = sut.route();
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("Should return statusCode 500 if httpRequest has no body", () => {
+    const sut = new userRouter();
+    const httpResponse = sut.route({});
+    expect(httpResponse.statusCode).toBe(500);
   });
 });
