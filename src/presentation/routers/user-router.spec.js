@@ -1,6 +1,13 @@
 class userRouter {
-  route(httpResponse) {
-    if (!httpResponse.body.email) {
+  route(httpRequest) {
+      const {name, gender, city, birthday, age} = httpRequest.body
+    if (
+      !name ||
+      !gender ||
+      !city ||
+      !birthday||
+      !age
+    ) {
       return { statusCode: 400 };
     }
   }
@@ -15,6 +22,66 @@ describe("User Router", () => {
         city: "any_city",
         birthday: "any_birthday",
         age: "any_age",
+      },
+    };
+    const httpResponse = sut.route(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it("Should return statusCode 400 if no gender is provided", () => {
+    const sut = new userRouter();
+    const httpRequest = {
+      body: {
+        name: "any_name",
+        city: "any_city",
+        birthday: "any_birthday",
+        age: "any_age",
+      },
+    };
+    const httpResponse = sut.route(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it("Should return statusCode 400 if no city is provided", () => {
+    const sut = new userRouter();
+    const httpRequest = {
+      body: {
+        name: "any_name",
+        gender: "any_gender",
+        birthday: "any_birthday",
+        age: "any_age",
+      },
+    };
+    const httpResponse = sut.route(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it("Should return statusCode 400 if no birthday is provided", () => {
+    const sut = new userRouter();
+    const httpRequest = {
+      body: {
+        name: "any_name",
+        gender: "any_gender",
+        city: "any_city",
+        age: "any_age",
+      },
+    };
+    const httpResponse = sut.route(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it("Should return statusCode 400 if no age is provided", () => {
+    const sut = new userRouter();
+    const httpRequest = {
+      body: {
+        name: "any_name",
+        gender: "any_gender",
+        city: "any_city",
+        birthday: "any_birthday",
       },
     };
     const httpResponse = sut.route(httpRequest);
